@@ -1,7 +1,7 @@
 ---
-title: MPLS Indicators and Ancillary Data Usecases
-abbrev: MIAD Usecases
-docname: draft-dt-mpls-miad-usecases-00
+title: Usecases for MPLS Function Indicators and Ancillary Data
+abbrev: MPLS Indicators and Ancillay Data Usecases
+docname: draft-dt-mpls-miad-usecases-01
 category: info
 ipr: trust200902
 workgroup: MPLS Working Group
@@ -28,9 +28,9 @@ informative:
 --- abstract
 
 This document presents a number of use cases that have a common need for encoding
-MPLS Indicators and Ancillary Data (MIAD) in MPLS packets. The use cases described
+MPLS function indicators and ancillary data inside MPLS packets. The use cases described
 are not an exhaustive set, but rather the ones that are actively discussed at the
- MPLS Working Group.
+MPLS Working Group.
 
 --- middle
 
@@ -43,7 +43,7 @@ ancillary data is present.
 
 
 These use cases have been identified by the MPLS working group design team
-working on defining MPLS Indicators and Ancillary Data (MIAD) for the MPLS data
+working on defining MPLS function indicators and ancillary data for the MPLS data
 plane.  The use cases described in this document will be used to assist in
 identifying requirements and issues to be considered for future resolution by
 the working group.
@@ -77,8 +77,6 @@ Time Sensitive Networking:
 {::boilerplate bcp14}
 
 ## Acronyms and Abbreviations
-
-> MIAD: MPLS Indicators and Ancillary Data
 
 > ISD: In-stack data
 
@@ -141,15 +139,16 @@ multiple slice aggregates need to identify the slice aggregate packets
 in order to enforce the associated forwarding action and treatment.
 
 An IETF network slice need MAY support the following key features:
+
 1. A Slice Selector
 2. A Network Resource Partition associated with a slice aggregate.
 3. A Path selection criteria
-4. Verification that SLOs are met. This May be done by active measurements
-   (inferred) or using IOAM.
+4. Verification that per slice SLOs are being met. This may be done by active measurements
+   (inferred) or by using IOAM.
 5. Additionally, there is an on-going discussion on using Service Functions
-   (SFs) with slices. This may require insertion of an NSH.
+   (SFs) with network slices. This may require insertion of an NSH.
 6. For multi-domain scenarios, a packet that traverses multiple domains may
-   encode a different identifiers in each domain.
+   encode different identifiers within each domain.
 
 ### Global Identifier as Slice Selector
 
@@ -275,12 +274,31 @@ provisioning, perform fine-granularity traffic steering and network resource
 adjustment. To support APN in MPLS networks, mechanisms are needed to hold the
 APN attribute.
 
-## Co-existence of usecases in same packet (input from Loa)
+# Co-existence of Usecases
 
-The aforementioned use cases MAY co-exist in the same packet. For example:
-- IOAM may be desirable on a network slicing packet
-- IOAM may be desirable on a Time Sensitive Networking packet
-- SF may be carried in a network slicing packet, etc.
+Two or more of the aforementioned use cases MAY co-exist in the same packet.
+Some examples of such usecases are described below.
+
+## IOAM with Network Slicing
+
+IOAM may provide key functions with network slicing to help ensure that
+critical network slice SLOs are being met by the network provider.
+
+In such a case, IOAM is able collect key performance measurement parameters of
+network slice traffic flows as it traverses the transport network.
+
+This may require, in addition to carrying a specific network slice selector
+(e.g., GISS), the MPLS network slice packets may have to also carry IOAM
+ancillary data.
+
+Note that the IOAM ancillary data may have to be modified, and updated on
+some/all LSRs traversed by the network slice MPLS packets.
+
+## IOAM with Time Sensitive Networking
+
+IOAM operation may also be desirable on MPLS packets that carry time-sensitive
+related data. Similarly, this may require the presence of multiple ancilary data
+(whether In-stack or Post-stack ancillary data) to be present in the same MPLS packet.
 
 # IANA Considerations
 
@@ -288,18 +306,30 @@ This document has no IANA actions.
 
 # Security Considerations
 
-TBD.
+This document introduces no new security considerations.
 
 # Acknowledgement
 
-TBD.
+The authors gratefully acknowledge the input of the members of the
+MPLS Open Design Team.
+
 
 # Contributors
 
 The following individuals contributed to this document:
 
 ~~~
-   TBD
-   TBD
-   Email: TBD
+
+   Kiran Makhijani
+   Futurewei Technologies
+   Email: kiranm@futurewei.com
+
+   Haoyu Song
+   Futurewei Technologies
+   Email: haoyu.song@futurewei.com
+
+   Loa Andersson
+   Bronze Dragon Consulting
+   Email: loa@pi.nu
+
 ~~~

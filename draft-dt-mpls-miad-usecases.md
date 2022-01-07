@@ -1,7 +1,7 @@
 ---
-title: Usecases for MPLS Function Indicators and Ancillary Data
+title: Usecases for MPLS Indicators and Ancillary Data
 abbrev: MPLS Indicators and Ancillay Data Usecases
-docname: draft-dt-mpls-miad-usecases-01
+docname: draft-saad-mpls-miad-usecases-00
 category: info
 ipr: trust200902
 workgroup: MPLS Working Group
@@ -17,6 +17,19 @@ author:
     name: Tarek Saad
     organization: Juniper Networks
     email: tsaad@juniper.net
+
+ -
+    ins: K. Makhijani
+    name: Kiran Makhijani
+    organization: Futurewei Technologies
+    email: kiranm@futurewei.com
+
+ -
+    ins: H. Song
+    name: Haoyu Song
+    organization: Futurewei Technologies
+    email: haoyu.song@futurewei.com
+
 
 
 normative:
@@ -77,6 +90,8 @@ Time Sensitive Networking:
 {::boilerplate bcp14}
 
 ## Acronyms and Abbreviations
+
+> MIAD: MPLS Label Stack Indicators for Ancillary Data
 
 > ISD: In-stack data
 

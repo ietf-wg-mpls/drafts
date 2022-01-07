@@ -4,12 +4,14 @@
 
 MPLS Working Group                                               T. Saad
 Internet-Draft                                          Juniper Networks
-Intended status: Informational                            5 January 2022
-Expires: 9 July 2022
+Intended status: Informational                              K. Makhijani
+Expires: 10 July 2022                                            H. Song
+                                                  Futurewei Technologies
+                                                          6 January 2022
 
 
-        Usecases for MPLS Function Indicators and Ancillary Data
-                     draft-dt-mpls-miad-usecases-01
+            Usecases for MPLS Indicators and Ancillary Data
+                    draft-saad-mpls-miad-usecases-00
 
 Abstract
 
@@ -34,12 +36,27 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 9 July 2022.
+   This Internet-Draft will expire on 10 July 2022.
 
 Copyright Notice
 
    Copyright (c) 2022 IETF Trust and the persons identified as the
    document authors.  All rights reserved.
+
+
+
+
+
+
+
+
+
+
+
+Saad, et al.              Expires 10 July 2022                  [Page 1]
+
+Internet-Draft  MPLS Indicators and Ancillay Data Usecas    January 2022
+
 
    This document is subject to BCP 78 and the IETF Trust's Legal
    Provisions Relating to IETF Documents (https://trustee.ietf.org/
@@ -50,24 +67,16 @@ Copyright Notice
    as described in Section 4.e of the Trust Legal Provisions and are
    provided without warranty as described in the Simplified BSD License.
 
-
-
-
-Saad                       Expires 9 July 2022                  [Page 1]
-
-Internet-Draft  MPLS Indicators and Ancillay Data Usecas    January 2022
-
-
 Table of Contents
 
    1.  Introduction  . . . . . . . . . . . . . . . . . . . . . . . .   2
      1.1.  Terminology . . . . . . . . . . . . . . . . . . . . . . .   3
      1.2.  Acronyms and Abbreviations  . . . . . . . . . . . . . . .   3
-   2.  Use Cases . . . . . . . . . . . . . . . . . . . . . . . . . .   3
-     2.1.  In-situ OAM . . . . . . . . . . . . . . . . . . . . . . .   3
+   2.  Use Cases . . . . . . . . . . . . . . . . . . . . . . . . . .   4
+     2.1.  In-situ OAM . . . . . . . . . . . . . . . . . . . . . . .   4
      2.2.  Network Slicing . . . . . . . . . . . . . . . . . . . . .   4
        2.2.1.  Global Identifier as Slice Selector . . . . . . . . .   5
-       2.2.2.  Forwarding Label as a Slice Selector  . . . . . . . .   5
+       2.2.2.  Forwarding Label as a Slice Selector  . . . . . . . .   6
      2.3.  Time Sensitive Networking . . . . . . . . . . . . . . . .   6
        2.3.1.  Stack-based Methods for Latency Control . . . . . . .   6
        2.3.2.  Stack Entry Format  . . . . . . . . . . . . . . . . .   7
@@ -77,14 +86,14 @@ Table of Contents
    3.  Co-existence of Usecases  . . . . . . . . . . . . . . . . . .   8
      3.1.  IOAM with Network Slicing . . . . . . . . . . . . . . . .   8
      3.2.  IOAM with Time Sensitive Networking . . . . . . . . . . .   8
-   4.  IANA Considerations . . . . . . . . . . . . . . . . . . . . .   8
-   5.  Security Considerations . . . . . . . . . . . . . . . . . . .   8
+   4.  IANA Considerations . . . . . . . . . . . . . . . . . . . . .   9
+   5.  Security Considerations . . . . . . . . . . . . . . . . . . .   9
    6.  Acknowledgement . . . . . . . . . . . . . . . . . . . . . . .   9
    7.  Contributors  . . . . . . . . . . . . . . . . . . . . . . . .   9
    8.  References  . . . . . . . . . . . . . . . . . . . . . . . . .   9
      8.1.  Normative References  . . . . . . . . . . . . . . . . . .   9
      8.2.  Informative References  . . . . . . . . . . . . . . . . .   9
-   Author's Address  . . . . . . . . . . . . . . . . . . . . . . . .  11
+   Authors' Addresses  . . . . . . . . . . . . . . . . . . . . . . .  11
 
 1.  Introduction
 
@@ -98,6 +107,13 @@ Table of Contents
    will be used to assist in identifying requirements and issues to be
    considered for future resolution by the working group.
 
+
+
+Saad, et al.              Expires 10 July 2022                  [Page 2]
+
+Internet-Draft  MPLS Indicators and Ancillay Data Usecas    January 2022
+
+
    *  ID: draft-gandhi-mpls-ioam describes applicability of IOAM to MPLS
       dataplane.
 
@@ -106,13 +122,6 @@ Table of Contents
 
    *  RFC 8595 describes solution for MPLS-based forwarding for Service
       Function Chaining
-
-
-
-Saad                       Expires 9 July 2022                  [Page 2]
-
-Internet-Draft  MPLS Indicators and Ancillay Data Usecas    January 2022
-
 
 1.1.  Terminology
 
@@ -144,11 +153,22 @@ Internet-Draft  MPLS Indicators and Ancillay Data Usecas    January 2022
 
 1.2.  Acronyms and Abbreviations
 
+      MIAD: MPLS Label Stack Indicators for Ancillary Data
+
       ISD: In-stack data
 
       PSD: Post-stack data
 
       MPLS: Multiprotocol Label Switching
+
+
+
+
+
+Saad, et al.              Expires 10 July 2022                  [Page 3]
+
+Internet-Draft  MPLS Indicators and Ancillay Data Usecas    January 2022
+
 
 2.  Use Cases
 
@@ -162,13 +182,6 @@ Internet-Draft  MPLS Indicators and Ancillay Data Usecas    January 2022
    added to the data packets rather than being sent within the probe
    packets specifically dedicated to OAM or Performance Measurement
    (PM).
-
-
-
-Saad                       Expires 9 July 2022                  [Page 3]
-
-Internet-Draft  MPLS Indicators and Ancillay Data Usecas    January 2022
-
 
    IOAM can run in two modes End-to-End (E2E) and Hop-by-Hop (HbH).  In
    E2E mode, only the encapsulating and decapsulating nodes will process
@@ -205,6 +218,14 @@ Internet-Draft  MPLS Indicators and Ancillay Data Usecas    January 2022
    comprises of the traffic flows of one or more IETF Network Slices of
    similar characteristics.
 
+
+
+
+Saad, et al.              Expires 10 July 2022                  [Page 4]
+
+Internet-Draft  MPLS Indicators and Ancillay Data Usecas    January 2022
+
+
    A router that requires forwarding of a packet that belongs to a slice
    aggregate may have to decide on the forwarding action to take based
    on selected next-hop(s), and the forwarding treatment (e.g.,
@@ -217,14 +238,6 @@ Internet-Draft  MPLS Indicators and Ancillay Data Usecas    January 2022
    action and treatment.
 
    An IETF network slice need MAY support the following key features:
-
-
-
-
-Saad                       Expires 9 July 2022                  [Page 4]
-
-Internet-Draft  MPLS Indicators and Ancillay Data Usecas    January 2022
-
 
    1.  A Slice Selector
 
@@ -262,6 +275,13 @@ Internet-Draft  MPLS Indicators and Ancillay Data Usecas    January 2022
    aggregate.  The GISS can be encoded in an MPLS label and may appear
    in several positions in the MPLS label stack.
 
+
+
+Saad, et al.              Expires 10 July 2022                  [Page 5]
+
+Internet-Draft  MPLS Indicators and Ancillay Data Usecas    January 2022
+
+
 2.2.2.  Forwarding Label as a Slice Selector
 
    [RFC3031] states in Section 2.1 that: 'Some routers analyze a
@@ -274,14 +294,6 @@ Internet-Draft  MPLS Indicators and Ancillay Data Usecas    January 2022
    same destination but that belong to different slice aggregates.  In
    this case, LSRs can use the top forwarding label to infer both the
    forwarding action and the forwarding treatment to be invoked on the
-
-
-
-Saad                       Expires 9 July 2022                  [Page 5]
-
-Internet-Draft  MPLS Indicators and Ancillay Data Usecas    January 2022
-
-
    packets.  A similar approach is described in
    [I-D.ietf-spring-resource-aware-segments] and
    [I-D.bestbar-teas-ns-packet].
@@ -318,6 +330,14 @@ Internet-Draft  MPLS Indicators and Ancillay Data Usecas    January 2022
    stack equals the number of routers the packet needs to traverse in
    the network, and each deadline value corresponds to a specific
    router.  The Top-of-Stack (ToS) corresponds to the first router's
+
+
+
+Saad, et al.              Expires 10 July 2022                  [Page 6]
+
+Internet-Draft  MPLS Indicators and Ancillay Data Usecas    January 2022
+
+
    deadline while the Bottom-of-Stack (BoS) refers to the last's.  All
    local deadlines in the stack are later or equal to the current time
    (upon which all routers agree), and times closer to the ToS are
@@ -327,16 +347,6 @@ Internet-Draft  MPLS Indicators and Ancillay Data Usecas    January 2022
    headers; no other router needs to be aware of the requirements of the
    time sensitive flows.  Hence admitting a new flow only requires
    updating the information base of the ingress router.
-
-
-
-
-
-
-Saad                       Expires 9 July 2022                  [Page 6]
-
-Internet-Draft  MPLS Indicators and Ancillay Data Usecas    January 2022
-
 
    MPLS LSRs that expose the Top of Stack (ToS) label can also inspect
    the associated "deadline" carried in the packet (either in MPLS stack
@@ -377,22 +387,18 @@ Internet-Draft  MPLS Indicators and Ancillay Data Usecas    January 2022
    Network Programming combines Segment Routing (SR) functions to
    achieve a networking objective that goes beyond mere packet routing.
 
+
+
+Saad, et al.              Expires 10 July 2022                  [Page 7]
+
+Internet-Draft  MPLS Indicators and Ancillay Data Usecas    January 2022
+
+
    It may be desirable to encode a pointers to function and its
    function-arguments within an MPLS packet transport header.  For
    example, in MPLS we can encode the FUNC::ARGs within the label stack
    or after the bottom of stack to support the equivalent of FUNC::ARG
    in SRv6 as described in [RFC8986].
-
-
-
-
-
-
-
-Saad                       Expires 9 July 2022                  [Page 7]
-
-Internet-Draft  MPLS Indicators and Ancillay Data Usecas    January 2022
-
 
 2.6.  Application Aware Networking (APN)
 
@@ -434,6 +440,16 @@ Internet-Draft  MPLS Indicators and Ancillay Data Usecas    January 2022
    multiple ancilary data (whether In-stack or Post-stack ancillary
    data) to be present in the same MPLS packet.
 
+
+
+
+
+
+Saad, et al.              Expires 10 July 2022                  [Page 8]
+
+Internet-Draft  MPLS Indicators and Ancillay Data Usecas    January 2022
+
+
 4.  IANA Considerations
 
    This document has no IANA actions.
@@ -441,14 +457,6 @@ Internet-Draft  MPLS Indicators and Ancillay Data Usecas    January 2022
 5.  Security Considerations
 
    This document introduces no new security considerations.
-
-
-
-
-Saad                       Expires 9 July 2022                  [Page 8]
-
-Internet-Draft  MPLS Indicators and Ancillay Data Usecas    January 2022
-
 
 6.  Acknowledgement
 
@@ -490,6 +498,14 @@ Internet-Draft  MPLS Indicators and Ancillay Data Usecas    January 2022
               Saad, T., Beeram, V. P., Wen, B., Ceccarelli, D., Halpern,
               J., Peng, S., Chen, R., Liu, X., Contreras, L. M., Rokui,
               R., and L. Jalil, "Realizing Network Slices in IP/MPLS
+
+
+
+Saad, et al.              Expires 10 July 2022                  [Page 9]
+
+Internet-Draft  MPLS Indicators and Ancillay Data Usecas    January 2022
+
+
               Networks", Work in Progress, Internet-Draft, draft-
               bestbar-teas-ns-packet-06, 22 December 2021,
               <https://www.ietf.org/archive/id/draft-bestbar-teas-ns-
@@ -498,14 +514,6 @@ Internet-Draft  MPLS Indicators and Ancillay Data Usecas    January 2022
    [I-D.decraene-mpls-slid-encoded-entropy-label-id]
               Decraene, B., Filsfils, C., Henderickx, W., Saad, T.,
               Beeram, V. P., and L. Jalil, "Using Entropy Label for
-
-
-
-Saad                       Expires 9 July 2022                  [Page 9]
-
-Internet-Draft  MPLS Indicators and Ancillay Data Usecas    January 2022
-
-
               Network Slice Identification in MPLS networks.", Work in
               Progress, Internet-Draft, draft-decraene-mpls-slid-
               encoded-entropy-label-id-02, 6 August 2021,
@@ -546,6 +554,14 @@ Internet-Draft  MPLS Indicators and Ancillay Data Usecas    January 2022
    [I-D.ietf-teas-ietf-network-slices]
               Farrel, A., Gray, E., Drake, J., Rokui, R., Homma, S.,
               Makhijani, K., Contreras, L. M., and J. Tantsura,
+
+
+
+Saad, et al.              Expires 10 July 2022                 [Page 10]
+
+Internet-Draft  MPLS Indicators and Ancillay Data Usecas    January 2022
+
+
               "Framework for IETF Network Slices", Work in Progress,
               Internet-Draft, draft-ietf-teas-ietf-network-slices-05, 25
               October 2021, <https://www.ietf.org/archive/id/draft-ietf-
@@ -554,14 +570,6 @@ Internet-Draft  MPLS Indicators and Ancillay Data Usecas    January 2022
    [I-D.kompella-mpls-mspl4fa]
               Kompella, K., Beeram, V. P., Saad, T., and I. Meilik,
               "Multi-purpose Special Purpose Label for Forwarding
-
-
-
-Saad                       Expires 9 July 2022                 [Page 10]
-
-Internet-Draft  MPLS Indicators and Ancillay Data Usecas    January 2022
-
-
               Actions", Work in Progress, Internet-Draft, draft-
               kompella-mpls-mspl4fa-01, 12 July 2021,
               <https://www.ietf.org/archive/id/draft-kompella-mpls-
@@ -591,7 +599,7 @@ Internet-Draft  MPLS Indicators and Ancillay Data Usecas    January 2022
               DOI 10.17487/RFC8986, February 2021,
               <https://www.rfc-editor.org/info/rfc8986>.
 
-Author's Address
+Authors' Addresses
 
    Tarek Saad
    Juniper Networks
@@ -599,6 +607,24 @@ Author's Address
    Email: tsaad@juniper.net
 
 
+   Kiran Makhijani
+   Futurewei Technologies
+
+
+
+
+Saad, et al.              Expires 10 July 2022                 [Page 11]
+
+Internet-Draft  MPLS Indicators and Ancillay Data Usecas    January 2022
+
+
+   Email: kiranm@futurewei.com
+
+
+   Haoyu Song
+   Futurewei Technologies
+
+   Email: haoyu.song@futurewei.com
 
 
 
@@ -613,4 +639,34 @@ Author's Address
 
 
 
-Saad                       Expires 9 July 2022                 [Page 11]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Saad, et al.              Expires 10 July 2022                 [Page 12]

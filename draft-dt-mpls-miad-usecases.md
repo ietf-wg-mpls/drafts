@@ -1,7 +1,7 @@
 ---
-title: Usecases for MPLS Indicators and Ancillary Data
-abbrev: MPLS Indicators and Ancillay Data Usecases
-docname: draft-saad-mpls-miad-usecases-00
+title: Use Cases for MPLS Function Indicators and Ancillary Data
+abbrev: MIAD Usecases
+docname: draft-saad-mpls-miad-usecases-01
 category: info
 ipr: trust200902
 workgroup: MPLS Working Group
@@ -33,37 +33,49 @@ author:
 
 
 normative:
-  RFC2119:
-  RFC8174:
 
 informative:
 
 --- abstract
 
-This document presents a number of use cases that have a common need for encoding
-MPLS function indicators and ancillary data inside MPLS packets. The use cases described
-are not an exhaustive set, but rather the ones that are actively discussed at the
-MPLS Working Group.
+This document presents a number of use cases that have a common need for
+encoding MPLS function indicators and ancillary data inside MPLS packets.
+There has been significant recent interest in extending the MPLS data plane to
+carry such ancillary data to address a number of use cases described in this
+document.
+
+The use cases described are not an exhaustive set, but rather the ones that are
+actively discussed by members of the IETF MPLS, PALS and DETNET working groups
+in the MPLS Open Design Team.
 
 --- middle
 
 # Introduction
 
-
 This document describes important cases that require carrying
 additional ancillary data within the MPLS packets, as well as the means to indicate
 ancillary data is present.
 
-
 These use cases have been identified by the MPLS working group design team
-working on defining MPLS function indicators and ancillary data for the MPLS data
-plane.  The use cases described in this document will be used to assist in
+working on defining MPLS function Indicators and Ancillary Data (MIAD) for the MPLS data
+plane. The MPLS ancillary data can be classified as:
+
+- implicit, or "no-data" associated with a funciton indicator,
+- within the label stack, e.g., encoded as labels, referred to as In Stack Data (ISD), and
+- after the Bottom of Stack (BoS), referred to as Post Stack Data (PSD).
+
+The use cases described in this document will be used to assist in
 identifying requirements and issues to be considered for future resolution by
 the working group.
 
-- ID: draft-gandhi-mpls-ioam describes applicability of IOAM to MPLS dataplane.
-- RFC 8986 describes the network programming usecase for SRv6 dataplane.
-- RFC 8595 describes solution for MPLS-based forwarding for Service Function Chaining
+- ID: {{?I-D.gandhi-mpls-ioam}} describes the applicability of IOAM to MPLS
+  data plane.
+- {{?RFC8986}} describes the network programming use case for SRv6 dataplane.
+- {{?RFC8595}} describes how Service Function Chaining (SFC) can be achieved in
+  an MPLS network by means of a logical representation of the Network Service
+  Header (NSH) in an MPLS label stack. Some limitations of this approach that
+  may be addressed by MIAD  are described in
+  {{?I-D.lm-mpls-sfc-path-verification}}.
 
 ## Terminology
 
@@ -86,24 +98,35 @@ Network Resource Partition:
 Time Sensitive Networking:
 : Networks that transport time sensitive traffic.
 
-
-{::boilerplate bcp14}
-
 ## Acronyms and Abbreviations
-
-> MIAD: MPLS Label Stack Indicators for Ancillary Data
 
 > ISD: In-stack data
 
 > PSD: Post-stack data
 
-> MPLS: Multiprotocol Label Switching
+> MIAD: MPLS Indicators and Ancillary Data
 
 # Use Cases
 
+## No Further Fastreroute
+
+MPLS Fast Reroute (FRR) {{?RFC4090}}, {{?RFC5286}} and {{?RFC7490}} is a useful
+and widely deployed tool for minimizing packet loss in the case of a link or
+node failure.
+
+Several cases exist where, once FRR has taken place in an MPLS
+network and resulted in rerouting a packet away from the failure, a second FRR that
+impacts the same packet to rerouting  is not helpful, and may even be disruptive. 
+
+For example, in such a case, the packet may continue to loop until its TTL
+expires.  This can lead to link congestion and further packet loss.
+Thus, the attempt to prevent a packet from being dropped may instead
+affect many other packets. A proposal to address this is presented in {{?I-D.kompella-mpls-nffrr}}.
+
+
 ## In-situ OAM
 
-In-situ Operations, Administration, and Maintenance (IOAM) records operational
+In-situ Operations, Administration, and Maintenance (IOAM) may record operational
 and telemetry information within the packet while the packet traverses a
 particular path in a network domain.
 
@@ -114,7 +137,7 @@ dedicated to OAM or Performance Measurement (PM).
 IOAM can run in two modes End-to-End (E2E) and Hop-by-Hop (HbH).  In E2E mode,
 only the encapsulating and decapsulating nodes will process IOAM data fields.
 In HbH mode, the encapsulating and decapsulating nodes as well as intermediate
-nodes process IOAM data fields. 
+IOAM-capable nodes process IOAM data fields. 
 
 The IOAM data fields are defined in {{?I-D.ietf-ippm-ioam-data}}, and can be
 used for various use-cases of OAM and PM.
@@ -123,17 +146,20 @@ used for various use-cases of OAM and PM.
 the MPLS data plane encapsulations, including Segment Routing (SR) with MPLS
 data plane (SR-MPLS).
 
-IOAM data are added after the bottom of the
-label stack. The IOAM data fields can be of fixed or incremental size as defined
-in {{?I-D.ietf-ippm-ioam-data}}.  {{?I-D.gandhi-mpls-ioam}} describes applicability
-of IOAM to MPLS dataplane.  The encapsulating MPLS node needs to know if the
-decapsulating MPLS node can process the IOAM data before adding it in the
-packet.
+The IOAM data may be added after the bottom of the MPLS label stack. The IOAM
+data fields can be of fixed or incremental size as defined in
+{{?I-D.ietf-ippm-ioam-data}}.  {{?I-D.gandhi-mpls-ioam}} describes
+applicability of IOAM to MPLS dataplane.  The encapsulating MPLS node needs to
+know if the decapsulating MPLS node can process the IOAM data before adding it
+in the packet. In HbH IOAM mode, nodes that are capable of processing IOAM will
+intercept and process the IOAM data. The presence of IOAM data will be
+transparent to nodes that does not support or do not participate in the IOAM
+process.
 
 ## Network Slicing
 
-{{?I-D.ietf-teas-ietf-network-slices}} specifies the definition of a network
-slice for use within the IETF and discusses the general framework for
+{{?I-D.ietf-teas-ietf-network-slices}} specifies the definition of 
+an IETF Network Slice. It further discusses the general framework for
 requesting and operating IETF Network Slices, their characteristics, and the
 necessary system components and interfaces.
 
@@ -153,13 +179,13 @@ The routers in the network that forward traffic over links that are shared by
 multiple slice aggregates need to identify the slice aggregate packets
 in order to enforce the associated forwarding action and treatment.
 
-An IETF network slice need MAY support the following key features:
+An IETF network slice MAY support the following key features:
 
 1. A Slice Selector
 2. A Network Resource Partition associated with a slice aggregate.
 3. A Path selection criteria
 4. Verification that per slice SLOs are being met. This may be done by active measurements
-   (inferred) or by using IOAM.
+   (inferred) or by using hybrid measurement methods, e.g., IOAM.
 5. Additionally, there is an on-going discussion on using Service Functions
    (SFs) with network slices. This may require insertion of an NSH.
 6. For multi-domain scenarios, a packet that traverses multiple domains may
@@ -177,7 +203,7 @@ LSRs use the MPLS forwarding label to determine the forwarding next-hop(s), and
 use the Global Identifier Slice Selector field in the packet to infer the
 specific forwarding treatment that needs to be applied on the packet.
 
-The GISS can be encoded within an MPLS label that is carried in the packet's
+The GISS can be encoded within an MPLS label carried in the packet's
 MPLS label stack.  All packets that belong to the same slice aggregate MAY
 carry the same GISS in the MPLS label stack.  It is also possible to have
 multiple GISS's map to the same slice aggregate. The GISS can be encoded in an
@@ -198,27 +224,27 @@ treatment to be invoked on the packets.  A similar approach is described in
 
 ## Time Sensitive Networking
 
-The routers in a network can perform two distinct functions on incoming packets, namely forwarding
-(where the packet should be sent) and scheduling (when the packet should be
-sent). Time Sensitive Networking (TSN) and Deterministic Networking provide several
-mechanisms for scheduling under the assumption that routers are time
-synchronized.  The most effective mechanisms for delay minimization involve
-per-flow resource allocation.
+The routers in a network can perform two distinct functions on incoming
+packets, namely forwarding (where the packet should be sent) and scheduling
+(when the packet should be sent). Time Sensitive Networking (TSN) and
+Deterministic Networking provide several mechanisms for scheduling under the
+assumption that routers are time synchronized.  The most effective mechanisms
+for delay minimization involve per-flow resource allocation.
 
 Segment Routing (SR) is a forwarding paradigm that allows encoding forwarding
 instructions in the packet in a stack data structure, rather than being
 programmed into the routers.  The SR instructions are contained within a packet
-in the form of a first-in first-out stack dictating the forwarding decisions of
+in the form of a First-in First-out stack dictating the forwarding decisions of
 successive routers.  Segment routing may be used to choose a path sufficiently
-short to be capable of providing sufficiently low end- to-end latency but does
-not influence the queueing of individual packets in each router along that pat
+short to be capable of providing a low end-to-end latency but does
+not influence the queueing of individual packets in each router along that path.
 
-TSN is required for networks transporting time sensitive traffic,
-that is, packets that are required to be delivered to their final
+TSN is required for networks transporting such time sensitive traffic,
+whose packets are required to be delivered to their final
 destination by a given time.
 
 
-### Stack-based Methods for Latency Control
+### Stack Based Methods for Latency Control
 
 One efficient data structure for inserting local deadlines into
 the headers is a "stack", similar to that used in Segment Routing to
@@ -256,11 +282,19 @@ timestamps.
 
 ## NSH Based Service Function Chaining
 
-The Network Service Header (NSH) can be embedded in an Extended Header (EH) to
-support the Path ID and any metadata that needs to be carried and and exchanged between
-Service Function Forwarders (SFFs).
+{{?RFC8595}} describes how Service Function Chaining (SFC) can be realized in
+an MPLS network by emulating the NSH by using only MPLS label stack elements.
 
 A reference to the NSH SFC use case is defined in {{?RFC8596}}.
+
+The approach in {{?RFC8595}} introduces some limitations that are discussed in
+{{?I-D.lm-mpls-sfc-path-verification}}. This approach, however, can benefit
+from the solution framework introduced with MIAD.
+
+For example, it may be possible for the Network Service Header (NSH) to be embedded in an
+Extended Header (EH) to support the Path ID and any metadata that needs to be
+carried and and exchanged between Service Function Forwarders (SFFs).
+
 
 ## Network Programming
 
@@ -274,32 +308,35 @@ user-defined behavior.
 Network Programming combines Segment Routing (SR) functions to achieve a
 networking objective that goes beyond mere packet routing.
 
-It may be desirable to encode a pointers to function and its function-arguments
+It may be desirable to encode a pointer to function and its arguments
 within an MPLS packet transport header. For example, in MPLS we can encode the
-FUNC::ARGs within the label stack or after the bottom of stack to support the
+FUNC::ARGs within the label stack or after the Bottom of Stack to support the
 equivalent of FUNC::ARG in SRv6 as described in {{?RFC8986}}.
 
-## Application Aware Networking (APN)
+## Application Aware Networking
 
-Application-aware Networking (APN) allows application-aware information (i.e.,
-APN attribute) including APN identification (ID) and/or APN parameters (e.g.
-network performance requirements) to be encapsulated at network edge devices
-and carried in packets traversing an APN domain in order to facilitate service
-provisioning, perform fine-granularity traffic steering and network resource
-adjustment. To support APN in MPLS networks, mechanisms are needed to hold the
-APN attribute.
+Application-aware Networking (APN) as described in
+{{?I-D.li-apn-problem-statement-usecases}} allows application-aware information
+(i.e., APN attributes) including APN identification (ID) and/or APN parameters
+(e.g.  network performance requirements) to be encapsulated at network edge
+devices and carried in packets traversing an APN domain. 
+
+The APN data is carried in packets to facilitate service provisioning, perform
+fine-granularity traffic steering and network resource adjustment. To support
+APN in MPLS networks, mechanisms are needed to carry such APN data in MPLS
+encapsulated packets.
 
 # Co-existence of Usecases
 
 Two or more of the aforementioned use cases MAY co-exist in the same packet.
-Some examples of such usecases are described below.
+Some examples of such use cases are described below.
 
 ## IOAM with Network Slicing
 
 IOAM may provide key functions with network slicing to help ensure that
 critical network slice SLOs are being met by the network provider.
 
-In such a case, IOAM is able collect key performance measurement parameters of
+In such a case, IOAM is able to collect key performance measurement parameters of
 network slice traffic flows as it traverses the transport network.
 
 This may require, in addition to carrying a specific network slice selector
@@ -309,7 +346,7 @@ ancillary data.
 Note that the IOAM ancillary data may have to be modified, and updated on
 some/all LSRs traversed by the network slice MPLS packets.
 
-## IOAM with Time Sensitive Networking
+## IOAM with Time-Sensitive Networking
 
 IOAM operation may also be desirable on MPLS packets that carry time-sensitive
 related data. Similarly, this may require the presence of multiple ancilary data
@@ -335,13 +372,9 @@ The following individuals contributed to this document:
 
 ~~~
 
-   Kiran Makhijani
-   Futurewei Technologies
-   Email: kiranm@futurewei.com
-
-   Haoyu Song
-   Futurewei Technologies
-   Email: haoyu.song@futurewei.com
+   Greg Mirsky
+   Ericsson
+   Email: gregimirsky@gmail.com
 
    Loa Andersson
    Bronze Dragon Consulting
